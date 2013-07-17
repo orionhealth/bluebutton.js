@@ -30,7 +30,12 @@ var Problems = function () {
         status: raw[i].status,
         age: raw[i].age,
         code: raw[i].code,
-        code_system: raw[i].code_system
+        code_system: raw[i].code_system,
+        translation: {
+          name: raw[i].translation_name,
+          code: raw[i].translation_code,
+          code_system: raw[i].translation_code_system
+        }
       });
     }
     
@@ -54,10 +59,16 @@ var Problems = function () {
       var start_date = parseDate(el.tag('low').attr('value')),
           end_date = parseDate(el.tag('high').attr('value'));
       
-      el = entry.template('2.16.840.1.113883.10.20.22.4.4').tag('code');
+      // TODO: validate that this is actually the correct location to retrieve this information (both 'value' and 'translation')
+      el = entry.template('2.16.840.1.113883.10.20.22.4.4').tag('value');
       var name = el.attr('displayName'),
           code = el.attr('code'),
           code_system = el.attr('codeSystem');
+
+      el = entry.template('2.16.840.1.113883.10.20.22.4.4').tag('translation');
+      var translation_name = el.attr('displayName'),
+          translation_code = el.attr('code'),
+          translation_code_system = el.attr('codeSystem');
       
       el = entry.template('2.16.840.1.113883.10.20.22.4.6');
       var status = el.tag('value').attr('displayName');
@@ -72,7 +83,10 @@ var Problems = function () {
         code: code,
         code_system: code_system,
         status: status,
-        age: age
+        age: age,
+        translation_name: translation_name,
+        translation_code: translation_code,
+        translation_code_system: translation_code_system
       });
     }
     return data;

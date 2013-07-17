@@ -6,7 +6,9 @@ var BlueButton = function (source) {
   // properties
   var xmlDOM = null,
       type = '',
-      data = {};
+      data = {},
+      documentType,
+      effectiveTime;
   
   // private methods
   var addMethods = function (objects) {
@@ -36,8 +38,11 @@ var BlueButton = function (source) {
     xmlDOM = Core.parseXML(source);
     
     type = 'ccda';
+    documentType = xmlDOM.tag('code').attr('displayName');
+    effectiveTime = Core.parseDate(xmlDOM.tag('effectiveTime').attr('value'));
+
     
-    data.document = { type: type };
+    data.document = { type: type, documentType: documentType, date: effectiveTime };
     data.allergies = Allergies.process(xmlDOM, type);
     data.demographics  = Demographics.process(xmlDOM, type);
     data.encounters = Encounters.process(xmlDOM, type);
