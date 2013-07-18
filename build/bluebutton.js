@@ -973,6 +973,7 @@ var Labs = function () {
           code: r.code,
           code_system: r.code_system,
           code_system_name: r.code_system_name,
+          interpretation_code: r.interpretation_code,
           reference: {
             low: r.reference_low,
             high: r.reference_high
@@ -1020,11 +1021,19 @@ var Labs = function () {
         el = result.tag('value');
         var value = parseInt(el.attr('value')),
             unit = el.attr('unit');
+
+        el = result.tag('interpretationCode');
+        var interpretation_code = el.attr('code');
         
         // reference range may not be present
-        reference_low = null;
-        reference_high = null;
-        
+        el = result.tag('referenceRange').tag('observationRange').tag('value');
+
+        var low = el.tag('low');
+        var reference_low = low.attr('value');
+    
+        var high = el.tag('high');
+        var reference_high = high.attr('value');
+            
         results_data.push({
           date: date,
           name: name,
@@ -1033,6 +1042,7 @@ var Labs = function () {
           code: code,
           code_system: code_system,
           code_system_name: code_system_name,
+          interpretation_code: interpretation_code,
           reference_low: reference_low,
           reference_high: reference_high
         });
@@ -1323,6 +1333,7 @@ var Problems = function () {
       var start_date = parseDate(el.tag('low').attr('value')),
           end_date = parseDate(el.tag('high').attr('value'));
       
+      // TODO: validate that this is actually the correct location to retrieve this information (both 'value' and 'translation')
       el = entry.template('2.16.840.1.113883.10.20.22.4.4').tag('value');
       var name = el.attr('displayName'),
           code = el.attr('code'),
