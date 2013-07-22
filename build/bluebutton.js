@@ -1553,6 +1553,7 @@ var Vitals = function () {
           code: r.code,
           code_system: r.code_system,
           code_system_name: r.code_system_name,
+          interpretation_code: r.interpretation_code,
           value: r.value,
           unit: r.unit
         });
@@ -1591,6 +1592,9 @@ var Vitals = function () {
             code = el.attr('code'),
             code_system = el.attr('codeSystem'),
             code_system_name = el.attr('codeSystemName');
+
+        el = result.tag('interpretationCode');
+        var interpretation_code = el.attr('code');
         
         el = result.tag('value');
         var value = parseInt(el.attr('value')),
@@ -1601,6 +1605,7 @@ var Vitals = function () {
           code: code,
           code_system: code_system,
           code_system_name: code_system_name,
+          interpretation_code: interpretation_code,
           value: value,
           unit: unit
         });
