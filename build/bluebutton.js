@@ -37,6 +37,7 @@ var Core = function () {
         el: currentEl,
         template: template,
         tag: tag,
+        tagWithAttr: tagWithAttr,
         elsByTag: elsByTag,
         attr: attr,
         val: val,
@@ -69,6 +70,18 @@ var Core = function () {
       if (el[i].getAttribute(attr) === value) {
         return el[i];
       }
+    }
+  };
+
+  /*
+   * Find element by tag name, then attribute value.
+   */
+  var tagWithAttr = function(tag, attr, value) {
+    var el = tagAttrVal(this.el, tag, attr, value);
+    if (!el) {
+      return emptyEl();
+    } else {
+      return wrapElement(el.parentNode);
     }
   };
   
@@ -1098,6 +1111,10 @@ var Medications = function () {
           start: raw[i].start_date,
           end: raw[i].end_date
         },
+        period: {
+          value: raw[i].period_value,
+          unit: raw[i].period_unit
+        },
         product: {
           name: raw[i].product_name,
           code: raw[i].product_code,
@@ -1163,11 +1180,15 @@ var Medications = function () {
     
     for (var i = 0; i < entries.length; i++) {
       entry = entries[i];
-      
-      el = entry.tag('effectiveTime');
+
+      el = entry.tagWithAttr('effectiveTime', 'xsi:type', 'IVL_TS');
       var start_date = parseDate(el.tag('low').attr('value')),
           end_date = parseDate(el.tag('high').attr('value'));
-      
+
+      el = entry.tagWithAttr('effectiveTime', 'xsi:type', 'PIVL_TS');
+      var period_value = el.tag('period').attr('value'),
+          period_unit = el.tag('period').attr('unit');
+     
       el = entry.tag('manufacturedProduct').tag('code');
       var product_name = el.attr('displayName'),
           product_code = el.attr('code'),
@@ -1182,6 +1203,12 @@ var Medications = function () {
       el = entry.tag('doseQuantity');
       var dose_value = el.attr('value'),
           dose_unit = el.attr('unit');
+
+      // TODO: verify, our examples imply the units can come from the original text
+      el = entry.tag('doseQuantity').tag('translation').tag('originalText');
+      if (el.val()) {
+        dose_unit = el.val();
+      }
       
       el = entry.tag('rateQuantity');
       var rate_quantity_value = el.attr('value'),
@@ -1224,6 +1251,8 @@ var Medications = function () {
       data.push({
         start_date: start_date,
         end_date: end_date,
+        period_value: period_value,
+        period_unit: period_unit,
         product_name: product_name,
         product_code: product_code,
         product_code_system: product_code_system,

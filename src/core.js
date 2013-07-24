@@ -21,6 +21,7 @@ var Core = function () {
         el: currentEl,
         template: template,
         tag: tag,
+        tagWithAttr: tagWithAttr,
         elsByTag: elsByTag,
         attr: attr,
         val: val,
@@ -53,6 +54,18 @@ var Core = function () {
       if (el[i].getAttribute(attr) === value) {
         return el[i];
       }
+    }
+  };
+
+  /*
+   * Find element by tag name, then attribute value.
+   */
+  var tagWithAttr = function(tag, attr, value) {
+    var el = tagAttrVal(this.el, tag, attr, value);
+    if (!el) {
+      return emptyEl();
+    } else {
+      return wrapElement(el.parentNode);
     }
   };
   
