@@ -48,6 +48,7 @@ module.exports = function(grunt) {
           "<%= bb.src %>/sections/problems.js",
           "<%= bb.src %>/sections/procedures.js",
           "<%= bb.src %>/sections/vitals.js",
+          "<%= bb.src %>/sections/careplans.js",
           "<%= bb.src %>/bluebutton.js"
         ],
         dest: "<%= bb.build %>/bluebutton.js"

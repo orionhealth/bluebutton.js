@@ -28,6 +28,7 @@ var BlueButton = function (source) {
   var problems = function () { return data.problems };
   var procedures = function () { return data.procedures };
   var vitals = function () { return data.vitals };
+  var careplans = function () { return data.careplans };
   
   // init
   
@@ -52,6 +53,7 @@ var BlueButton = function (source) {
     data.problems = Problems.process(xmlDOM, type);
     data.procedures = Procedures.process(xmlDOM, type);
     data.vitals = Vitals.process(xmlDOM, type);
+    data.careplans = CarePlans.process(xmlDOM, type);
     
     addMethods([
       data,
@@ -64,7 +66,8 @@ var BlueButton = function (source) {
       data.medications,
       data.problems,
       data.procedures,
-      data.vitals
+      data.vitals,
+      data.careplans
     ]);
     
   // parse as JSON
@@ -87,6 +90,7 @@ var BlueButton = function (source) {
     data.problems = Problems.process(json, type);
     data.procedures = Procedures.process(json, type);
     data.vitals = Vitals.process(json, type);
+    data.careplans = CarePlans.process(json, type);
   }
   
   return {
@@ -101,7 +105,8 @@ var BlueButton = function (source) {
     medications: medications,
     problems: problems,
     procedures: procedures,
-    vitals: vitals
+    vitals: vitals,
+    careplans: careplans
   };
   
 };
